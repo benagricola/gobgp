@@ -1634,6 +1634,13 @@ func (server *BgpServer) handleGrpc(grpcReq *GrpcRequest) {
 						prefix.Mask = net.CIDRMask(i, bits)
 						f(id, prefix.String())
 					}
+				} else if dst.ShorterPrefixes {
+					_, prefix, _ := net.ParseCIDR(key)
+					ones, bits := prefix.Mask.Size()
+					for i := ones-1; i > 0; i-- {
+						prefix.Mask = net.CIDRMask(i, bits)
+						f(id, prefix.String())
+					}
 				}
 			}
 		} else {
